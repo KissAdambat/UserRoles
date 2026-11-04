@@ -45,7 +45,7 @@ namespace UserRoles.Controllers
         }
 
         [HttpGet("GetUserById/{id}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById([FromRoute] Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user is null)
