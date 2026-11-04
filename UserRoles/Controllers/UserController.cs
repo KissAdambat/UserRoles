@@ -54,5 +54,36 @@ namespace UserRoles.Controllers
             }
             return StatusCode(200, user);
         }
+
+        [HttpPut("UpdateUser/{id}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserDTO updateUserDto)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user is null)
+            {
+                return StatusCode(404, "User not found.");
+            }
+
+            user.Name = updateUserDto.Name;
+            user.Email = updateUserDto.Email;
+            user.Password = updateUserDto.Password;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return StatusCode(200, user);
+        }
+
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user is null)
+            {
+                return StatusCode(404, "User not found.");
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return StatusCode(200, "User deleted successfully.");
+        }
     }
 }
